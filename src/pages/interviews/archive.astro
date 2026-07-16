@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { getPublishedInterviews } from '../../lib/interviews';
+const articles = await getPublishedInterviews();
+const archivedArticles = articles.slice(3);
+---
+<BaseLayout title="過去のInterview｜人と場のあいだ" description="これまでに公開した過去のインタビュー一覧。">
+  <header class="page-header section-shell"><p class="eyebrow">INTERVIEW / ARCHIVE</p><h1>過去の記事</h1><p>これまでに話を聞いた人たちの記録です。</p></header>
+  <section class="archive section-shell">
+    <div class="archive-tools"><p><strong>{archivedArticles.length}</strong> STORIES</p><a href="/interviews/">最新のInterviewへ戻る</a></div>
+    {archivedArticles.length > 0 ? <div class="story-grid">{archivedArticles.map((article, index) => <ArticleCard {article} index={index + 3} />)}</div> : <div class="archive-empty"><p class="eyebrow">COMING SOON</p><h2>次のインタビューを準備中です。</h2><p>4件目以降の記事が公開されると、このページに自動で追加されます。</p></div>}
+  </section>
+</BaseLayout>

@@ -1,0 +1,17 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { getPublishedInterviews } from '../../lib/interviews';
+export async function getStaticPaths() {
+  const articles = await getPublishedInterviews();
+  const categories = [...new Set(articles.map((a) => a.data.categorySlug))];
+  return categories.map((category) => ({ params: { category } }));
+}
+const { category } = Astro.params;
+const articles = (await getPublishedInterviews()).filter((a) => a.data.categorySlug === category);
+const categoryName = articles[0]?.data.category ?? '';
+---
+<BaseLayout title={`${categoryName}の記事｜人と場のあいだ`} description={`${categoryName}に関するインタビュー一覧。`}>
+  <header class="page-header section-shell"><p class="eyebrow">THEME / CATEGORY</p><h1>{categoryName}</h1><p>{articles.length}件のストーリー</p></header>
+  <section class="archive section-shell"><div class="story-grid">{articles.map((article, i) => <ArticleCard {article} index={i} />)}</div><a class="outline-link" href="/interviews/">すべての記事を見る →</a></section>
+</BaseLayout>

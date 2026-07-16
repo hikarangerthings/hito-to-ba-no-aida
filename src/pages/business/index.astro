@@ -1,0 +1,12 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { formatDate } from '../../lib/interviews';
+import { businessUrl, getPublishedBusinessArticles } from '../../lib/business';
+const articles = await getPublishedBusinessArticles();
+---
+<BaseLayout title="Business｜人と場のあいだ" description="仕事、会社、事業について考えたことを記録するBusinessページ。">
+  <header class="page-header section-shell"><p class="eyebrow">BUSINESS</p><h1>Business</h1><p>仕事、会社、事業の仕組み。その背景にいる人と、続いていく理由を考えます。</p></header>
+  <section class="review-list section-shell" aria-label="Business記事一覧">
+    {articles.length > 0 ? articles.map((article, index) => <article class="review-row"><p class="review-number">{String(index + 1).padStart(2, '0')}</p><div><p class="book-meta">{article.data.businessType ?? 'BUSINESS'}</p><h2><a href={businessUrl(article)}>{article.data.title}</a></h2><p>{article.data.description}</p></div><div class="review-side">{article.data.businessName && <p class="book-title">{article.data.businessName}</p>}<time datetime={article.data.publishedAt.toISOString()}>{formatDate(article.data.publishedAt)}</time><a href={businessUrl(article)}>読む →</a></div></article>) : <div class="archive-empty"><p class="eyebrow">COMING SOON</p><h2>最初のBusiness記事を準備中です。</h2><p>`src/content/business/_template.md` をコピーすると、新しい記事を追加できます。</p></div>}
+  </section>
+</BaseLayout>

@@ -1,0 +1,32 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { formatDate } from '../../lib/interviews';
+import { getPublishedReviews, reviewUrl } from '../../lib/reviews';
+import '../../styles/article.css';
+
+export async function getStaticPaths() {
+  const reviews = await getCollection('reviews', ({ data }) => !data.draft);
+  return reviews.map((review) => ({ params: { slug: review.data.slug }, props: { review } }));
+}
+
+const { review } = Astro.props;
+const reviews = await getPublishedReviews();
+const index = reviews.findIndex((item) => item.id === review.id);
+const previous = reviews[index + 1];
+const next = reviews[index - 1];
+const { Content } = await render(review);
+const d = review.data;
+const canonical = new URL(reviewUrl(review), Astro.site ?? Astro.url.origin).href;
+const jsonLd = { '@context': 'https://schema.org', '@type': 'Review', name: d.title, reviewBody: d.description, datePublished: d.publishedAt.toISOString(), author: { '@type': 'Person', name: d.author }, itemReviewed: { '@type': 'Book', name: d.bookTitle, author: { '@type': 'Person', name: d.bookAuthor } }, mainEntityOfPage: canonical };
+---
+<BaseLayout title={`${d.title}｜書評｜人と場のあいだ`} description={d.description} image={d.cover} type="article" {jsonLd}>
+  <article class="review-detail">
+    <header class="review-header"><p class="eyebrow">BOOK REVIEW</p><h1>{d.title}</h1><p class="review-description">{d.description}</p><dl><div><dt>Book</dt><dd>『{d.bookTitle}』</dd></div><div><dt>Author</dt><dd>{d.bookAuthor}</dd></div>{d.publisher && <div><dt>Publisher</dt><dd>{d.publisher}</dd></div>}<div><dt>Published</dt><dd><time datetime={d.publishedAt.toISOString()}>{formatDate(d.publishedAt)}</time></dd></div><div><dt>Written by</dt><dd>{d.author}</dd></div></dl></header>
+    {d.cover && <figure class="review-cover"><img src={d.cover} alt={d.coverAlt} /></figure>}
+    <div class="article-body"><Content /></div>
+    <footer class="article-footer"><p>この書評のテーマ</p><div class="tag-list">{d.tags.map((tag) => <span>#{tag}</span>)}</div></footer>
+  </article>
+  <nav class="article-pager" aria-label="前後の書評">{previous ? <a href={reviewUrl(previous)}><span>← PREVIOUS</span>{previous.data.title}</a> : <span></span>}{next && <a class="next" href={reviewUrl(next)}><span>NEXT →</span>{next.data.title}</a>}</nav>
+  <div class="back-link"><a href="/reviews/">← 書評一覧へ戻る</a></div>
+</BaseLayout>

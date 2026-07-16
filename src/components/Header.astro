@@ -1,0 +1,20 @@
+---
+const path = Astro.url.pathname;
+const links = [
+  { href: '/interviews/', label: 'Interview' },
+  { href: '/reviews/', label: 'Book Review' },
+  { href: '/business/', label: 'Business' },
+  { href: '/videos/', label: 'Video' },
+  { href: '/podcast/', label: 'Podcast' },
+  { href: '/about/', label: 'About me' },
+];
+---
+<header class="site-header">
+  <a class="brand" href="/" aria-label="人と場のあいだ トップページへ">
+    <span class="brand-mark" aria-hidden="true">H/B</span>
+    <span class="brand-text"><span class="brand-ja">人と場のあいだ</span><span class="brand-en">People, Places & Stories</span></span>
+  </a>
+  <nav id="site-nav" class="site-nav" aria-label="メインナビゲーション">
+    {links.map((link) => <a href={link.href} aria-current={path.startsWith(link.href.replace('/#themes', '/__')) || path === link.href ? 'page' : undefined}>{link.label}</a>)}
+  </nav>
+</header>

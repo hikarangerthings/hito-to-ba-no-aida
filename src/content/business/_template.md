@@ -1,0 +1,24 @@
+---
+title: "Business記事のタイトル"
+slug: "business-article"
+description: "この記事の短い紹介文を80〜120字程度で入力します。"
+publishedAt: "2026-07-16"
+author: "Hikaru Taniguchi"
+businessName: "会社名・サービス名"
+businessType: "事業分野"
+mainImageAlt: "記事画像の説明"
+draft: true
+tags:
+  - 仕事
+  - ビジネス
+---
+
+ここに、この事業やテーマを取り上げた理由を書きます。
+
+## 背景
+
+事業が始まった背景や、注目したポイントを書きます。
+
+## 考えたこと
+
+取材や調査を通して考えたことを、自分の言葉でまとめます。

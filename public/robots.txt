@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://hito-to-ba-no-aida.pages.dev/sitemap-index.xml

@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { articleUrl, formatDate, getPublishedInterviews } from '../../lib/interviews';
+const articles = await getPublishedInterviews();
+const mainArticles = articles.slice(0, 3);
+const categories = [...new Map(articles.map((a) => [a.data.categorySlug, a.data.category])).entries()];
+---
+<BaseLayout title="Interview｜人と場のあいだ" description="人と場のあいだに掲載したすべてのインタビュー。">
+  <header class="page-header section-shell"><p class="eyebrow">INTERVIEW</p><h1>話を聞いた人たち</h1><p>それぞれの仕事と生活、これまでのこと、これからのこと。</p></header>
+  <section class="interview-main-list section-shell" aria-label="最新のインタビュー">
+    {mainArticles.map((article, index) => <article class="interview-feature-row"><p class="section-index">{index === 0 ? 'LATEST / ' : ''}#{article.data.number ?? String(index + 1).padStart(2, '0')}</p><div class="feature-row-content"><div><h2><a href={articleUrl(article)}>{article.data.title}</a></h2><p class="guest">{article.data.guestName}<span>｜{article.data.guestRole}</span></p></div><div class="latest-detail"><p>{article.data.description}</p><time datetime={article.data.publishedAt.toISOString()}>{formatDate(article.data.publishedAt)}</time><a href={articleUrl(article)}>記事を読む →</a></div></div></article>)}
+  </section>
+  <div class="interview-more section-shell"><a href="/interviews/archive/"><span>More</span><i aria-hidden="true">→</i><small>過去の記事を見る</small></a></div>
+  <section class="interview-categories section-shell"><header><p class="eyebrow">CATEGORIES</p><h2>カテゴリから探す</h2></header><nav aria-label="カテゴリから記事を探す">{categories.map(([slug, name]) => <a href={`/categories/${slug}/`}>{name}<span aria-hidden="true">↗</span></a>)}</nav></section>
+</BaseLayout>

@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPublishedInterviews } from '../../lib/interviews';
+const articles = await getPublishedInterviews();
+const categories = [...new Map(articles.map((article) => [article.data.categorySlug, article.data.category])).entries()];
+---
+<BaseLayout title="カテゴリ別の記事｜人と場のあいだ" description="テーマやカテゴリからインタビューを探せます。">
+  <header class="page-header section-shell"><p class="eyebrow">CATEGORIES</p><h1>カテゴリ別の記事</h1><p>仕事、店、コミュニティ。関心のあるテーマから、人と場所の物語を探せます。</p></header>
+  <section class="channel-list section-shell" aria-label="カテゴリ一覧">
+    {categories.map(([slug, name], index) => {
+      const count = articles.filter((article) => article.data.categorySlug === slug).length;
+      return <a href={`/categories/${slug}/`}><span>{String(index + 1).padStart(2, '0')}</span><h2>{name}</h2><p>{count}件の記事</p><i aria-hidden="true">→</i></a>;
+    })}
+  </section>
+</BaseLayout>

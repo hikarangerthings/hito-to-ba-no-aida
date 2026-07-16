@@ -1,0 +1,19 @@
+---
+interface Props {
+  src?: string;
+  alt?: string;
+  number?: number | string;
+  eager?: boolean;
+  class?: string;
+}
+const { src, alt = '', number = '—', eager = false, class: className = '' } = Astro.props;
+---
+<div class:list={['media-visual', className]}>
+  {src ? (
+    <img src={src} alt={alt} loading={eager ? 'eager' : 'lazy'} decoding="async" />
+  ) : (
+    <div class="visual-placeholder" role="img" aria-label={alt || '記事画像のプレースホルダー'}>
+      <span>People, Places<br />& Stories</span><strong>#{String(number).padStart(3, '0')}</strong>
+    </div>
+  )}
+</div>

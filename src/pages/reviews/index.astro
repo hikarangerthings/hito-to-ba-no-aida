@@ -1,0 +1,12 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { formatDate } from '../../lib/interviews';
+import { getPublishedReviews, reviewUrl } from '../../lib/reviews';
+const reviews = await getPublishedReviews();
+---
+<BaseLayout title="書評｜人と場のあいだ" description="読んだ本について考えたことを記録する書評ページ。">
+  <header class="page-header section-shell"><p class="eyebrow">BOOK REVIEWS</p><h1>書評</h1><p>読んだ本から考えたこと、日々の仕事や生活につながった言葉を記録します。</p></header>
+  <section class="review-list section-shell" aria-label="書評一覧">
+    {reviews.length > 0 ? reviews.map((review, index) => <article class="review-row"><p class="review-number">{String(index + 1).padStart(2, '0')}</p><div><p class="book-meta">{review.data.bookAuthor}{review.data.publisher && ` / ${review.data.publisher}`}</p><h2><a href={reviewUrl(review)}>{review.data.title}</a></h2><p>{review.data.description}</p></div><div class="review-side"><p class="book-title">『{review.data.bookTitle}』</p><time datetime={review.data.publishedAt.toISOString()}>{formatDate(review.data.publishedAt)}</time><a href={reviewUrl(review)}>読む →</a></div></article>) : <div class="archive-empty"><p class="eyebrow">COMING SOON</p><h2>最初の書評を準備中です。</h2><p>`src/content/reviews/_template.md` をコピーすると、新しい書評を追加できます。</p></div>}
+  </section>
+</BaseLayout>

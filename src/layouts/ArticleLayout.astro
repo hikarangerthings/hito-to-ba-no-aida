@@ -1,0 +1,30 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import MediaVisual from '../components/MediaVisual.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import type { Interview } from '../lib/interviews';
+import { articleUrl, formatDate } from '../lib/interviews';
+import '../styles/article.css';
+interface Props { article: Interview; previous?: Interview; next?: Interview; related: Interview[]; number: number; }
+const { article, previous, next, related, number } = Astro.props;
+const d = article.data;
+const canonical = new URL(articleUrl(article), Astro.site ?? Astro.url.origin).href;
+const jsonLd = { '@context': 'https://schema.org', '@type': 'Article', headline: d.title, description: d.description, datePublished: d.publishedAt.toISOString(), dateModified: (d.updatedAt ?? d.publishedAt).toISOString(), author: { '@type': 'Person', name: d.author }, about: { '@type': 'Person', name: d.guestName }, image: d.mainImage ? new URL(d.mainImage, Astro.site ?? Astro.url.origin).href : undefined, mainEntityOfPage: canonical };
+---
+<BaseLayout title={`${d.title}｜人と場のあいだ`} description={d.description} image={d.mainImage} type="article" {jsonLd}>
+  <article class="article-detail">
+    <header class="article-hero">
+      <div class="article-kicker"><span>#{d.number ?? String(number).padStart(2, '0')}</span><a href={`/categories/${d.categorySlug}/`}>{d.category}</a></div>
+      <h1>{d.title}</h1><p class="article-guest">{d.guestName}<span>｜{d.guestRole}</span></p><p class="article-lead">{d.description}</p>
+      <div class="article-byline"><p><span>Published</span><time datetime={d.publishedAt.toISOString()}>{formatDate(d.publishedAt)}</time></p>{d.updatedAt && <p><span>Updated</span><time datetime={d.updatedAt.toISOString()}>{formatDate(d.updatedAt)}</time></p>}<p><span>Written by</span>{d.author}</p></div>
+    </header>
+    {d.mainImage && <div class="article-main-visual"><MediaVisual src={d.mainImage} alt={d.mainImageAlt} number={number} eager /></div>}
+    <div class="article-body"><slot /></div>
+    <aside class="guest-profile"><p class="eyebrow">PROFILE</p><div><h2>{d.guestName}</h2><p class="guest-role">{d.guestRole}</p><p>{d.guestProfile}</p></div></aside>
+    {d.afterword && <section class="afterword"><p class="eyebrow">AFTERWORD</p><h2>聞き終えて</h2><p>{d.afterword}</p></section>}
+    <footer class="article-footer"><p>この記事のテーマ</p><div class="tag-list">{d.tags.map((tag) => <span>#{tag}</span>)}</div></footer>
+  </article>
+  <nav class="article-pager" aria-label="前後の記事">{previous ? <a href={articleUrl(previous)}><span>← PREVIOUS</span>{previous.data.title}</a> : <span></span>}{next && <a class="next" href={articleUrl(next)}><span>NEXT →</span>{next.data.title}</a>}</nav>
+  {related.length > 0 && <section class="related section-shell"><p class="eyebrow">RELATED STORIES</p><h2>あわせて読みたい</h2><div class="story-grid">{related.map((item, i) => <ArticleCard article={item} index={i} />)}</div></section>}
+  <div class="back-link"><a href="/interviews/">← 記事一覧へ戻る</a></div>
+</BaseLayout>

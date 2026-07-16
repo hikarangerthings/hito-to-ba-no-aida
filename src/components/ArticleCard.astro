@@ -1,0 +1,14 @@
+---
+import type { Interview } from '../lib/interviews';
+import { articleUrl } from '../lib/interviews';
+interface Props { article: Interview; index: number; }
+const { article, index } = Astro.props;
+const d = article.data;
+---
+<article class="article-card">
+  <div class="card-copy">
+    <p class="card-number">#{d.number ?? String(index + 1).padStart(2, '0')}</p>
+    <h3><a href={articleUrl(article)}>{d.title}</a></h3>
+    <p class="guest">{d.guestName}<span>｜{d.guestRole}</span></p>
+  </div>
+</article>
