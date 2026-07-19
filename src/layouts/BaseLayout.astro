@@ -30,5 +30,8 @@ const websiteLd = { '@context': 'https://schema.org', '@type': 'WebSite', name: 
     <meta name="twitter:card" content="summary_large_image" /><meta name="twitter:title" content={title} /><meta name="twitter:description" content={description} /><meta name="twitter:image" content={absoluteImage} />
     <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd ?? websiteLd)} />
   </head>
-  <body><a class="skip-link" href="#main-content">本文へ移動</a><Header /><main id="main-content"><slot /></main></body>
+  <body><a class="skip-link" href="#main-content">本文へ移動</a><Header /><main id="main-content"><slot /></main>
+    <!-- Cloudflare Web Analytics -->
+    <script is:inline type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"33dd6a0887a54a3e90dac7a7169e821b"}'></script>
+  </body>
 </html>

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://hito-to-ba-no-aida.pages.dev/sitemap-index.xml
+Sitemap: https://hito-to-ba-no-aida.hikaru-taniguchi-2023.workers.dev/sitemap-index.xml
