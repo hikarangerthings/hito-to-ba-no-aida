@@ -41,7 +41,7 @@
 - `src/styles/`：色やレイアウト。デザイン変更時のみ触ります。
 - `dist/`：ビルド時に自動生成される公開用ファイル。直接編集しません。
 
-詳しいインタビュー追加方法は [ARTICLE_GUIDE.md](./ARTICLE_GUIDE.md)、書評の追加方法は [BOOK_REVIEW_GUIDE.md](./BOOK_REVIEW_GUIDE.md)、Business記事の追加方法は [BUSINESS_GUIDE.md](./BUSINESS_GUIDE.md)、フォントや配置の変更方法は [DESIGN_GUIDE.md](./DESIGN_GUIDE.md)、公開方法は [DEPLOY_GUIDE.md](./DEPLOY_GUIDE.md) を参照してください。
+詳しいインタビュー追加方法は [ARTICLE_GUIDE.md](./ARTICLE_GUIDE.md)、書評の追加方法は [BOOK_REVIEW_GUIDE.md](./BOOK_REVIEW_GUIDE.md)、Business記事の追加方法は [BUSINESS_GUIDE.md](./BUSINESS_GUIDE.md)、Movie・Playlistの追加方法は [MOVIE_PLAYLIST_GUIDE.md](./MOVIE_PLAYLIST_GUIDE.md)、フォントや配置の変更方法は [DESIGN_GUIDE.md](./DESIGN_GUIDE.md)、公開方法は [DEPLOY_GUIDE.md](./DEPLOY_GUIDE.md) を参照してください。
 
 ## サイトURLの変更
 
