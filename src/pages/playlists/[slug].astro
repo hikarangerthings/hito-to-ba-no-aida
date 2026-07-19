@@ -1,0 +1,17 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { formatDate } from '../../lib/interviews';
+import '../../styles/article.css';
+export async function getStaticPaths() {
+  const articles = await getCollection('playlists', ({ data }) => !data.draft);
+  return articles.map((article) => ({ params: { slug: article.data.slug }, props: { article } }));
+}
+const { article } = Astro.props;
+const { Content } = await render(article);
+const d = article.data;
+---
+<BaseLayout title={`${d.title}｜Playlist｜人と場のあいだ`} description={d.description} type="article">
+  <article class="review-detail"><header class="review-header"><p class="eyebrow">PLAYLIST</p><h1>{d.title}</h1><p class="review-description">{d.description}</p><dl>{d.theme && <div><dt>Theme</dt><dd>{d.theme}</dd></div>}<div><dt>Published</dt><dd>{formatDate(d.publishedAt)}</dd></div><div><dt>Selected by</dt><dd>{d.author}</dd></div></dl>{d.serviceUrl && <a class="outline-link" href={d.serviceUrl} target="_blank" rel="noreferrer">プレイリストを開く ↗</a>}</header><div class="article-body"><Content /></div><footer class="article-footer"><div class="tag-list">{d.tags.map((tag) => <span>#{tag}</span>)}</div></footer></article>
+  <div class="back-link"><a href="/playlists/">← Playlist一覧へ戻る</a></div>
+</BaseLayout>

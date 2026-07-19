@@ -1,0 +1,17 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { formatDate } from '../../lib/interviews';
+import '../../styles/article.css';
+export async function getStaticPaths() {
+  const articles = await getCollection('movies', ({ data }) => !data.draft);
+  return articles.map((article) => ({ params: { slug: article.data.slug }, props: { article } }));
+}
+const { article } = Astro.props;
+const { Content } = await render(article);
+const d = article.data;
+---
+<BaseLayout title={`${d.title}｜Movie｜人と場のあいだ`} description={d.description} type="article">
+  <article class="review-detail"><header class="review-header"><p class="eyebrow">MOVIE</p><h1>{d.title}</h1><p class="review-description">{d.description}</p><dl><div><dt>Movie</dt><dd>『{d.movieTitle}』</dd></div>{d.director && <div><dt>Director</dt><dd>{d.director}</dd></div>}{d.releaseYear && <div><dt>Year</dt><dd>{d.releaseYear}</dd></div>}<div><dt>Published</dt><dd>{formatDate(d.publishedAt)}</dd></div><div><dt>Written by</dt><dd>{d.author}</dd></div></dl></header><div class="article-body"><Content /></div><footer class="article-footer"><div class="tag-list">{d.tags.map((tag) => <span>#{tag}</span>)}</div></footer></article>
+  <div class="back-link"><a href="/movies/">← Movie一覧へ戻る</a></div>
+</BaseLayout>

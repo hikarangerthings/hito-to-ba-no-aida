@@ -1,0 +1,12 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { formatDate } from '../../lib/interviews';
+import { getPublishedPlaylists, playlistUrl } from '../../lib/playlists';
+const articles = await getPublishedPlaylists();
+---
+<BaseLayout title="Playlist｜人と場のあいだ" description="日々の場面や気分に寄り添う音楽をまとめるPlaylistページ。">
+  <header class="page-header section-shell"><p class="eyebrow">PLAYLIST</p><h1>Playlist</h1><p>日々の場面や気分に寄り添う音楽を、短い言葉とともにまとめます。</p></header>
+  <section class="review-list section-shell" aria-label="プレイリスト一覧">
+    {articles.length > 0 ? articles.map((article, index) => <article class="review-row"><p class="review-number">{String(index + 1).padStart(2, '0')}</p><div><p class="book-meta">{article.data.theme ?? 'PLAYLIST'}</p><h2><a href={playlistUrl(article)}>{article.data.title}</a></h2><p>{article.data.description}</p></div><div class="review-side"><time datetime={article.data.publishedAt.toISOString()}>{formatDate(article.data.publishedAt)}</time><a href={playlistUrl(article)}>見る →</a></div></article>) : <div class="archive-empty"><p class="eyebrow">COMING SOON</p><h2>最初のPlaylistを準備中です。</h2><p>テンプレートをコピーすると、新しい記事を追加できます。</p></div>}
+  </section>
+</BaseLayout>

@@ -1,0 +1,12 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { formatDate } from '../../lib/interviews';
+import { getPublishedMovies, movieUrl } from '../../lib/movies';
+const articles = await getPublishedMovies();
+---
+<BaseLayout title="Movie｜人と場のあいだ" description="映画を観て考えたことを記録するMovieページ。">
+  <header class="page-header section-shell"><p class="eyebrow">MOVIE</p><h1>Movie</h1><p>映画を観て心に残った場面と、そこから考えたことを記録します。</p></header>
+  <section class="review-list section-shell" aria-label="映画記事一覧">
+    {articles.length > 0 ? articles.map((article, index) => <article class="review-row"><p class="review-number">{String(index + 1).padStart(2, '0')}</p><div><p class="book-meta">{article.data.director ?? 'MOVIE'}</p><h2><a href={movieUrl(article)}>{article.data.title}</a></h2><p>{article.data.description}</p></div><div class="review-side"><p class="book-title">『{article.data.movieTitle}』</p><time datetime={article.data.publishedAt.toISOString()}>{formatDate(article.data.publishedAt)}</time><a href={movieUrl(article)}>読む →</a></div></article>) : <div class="archive-empty"><p class="eyebrow">COMING SOON</p><h2>最初のMovie記事を準備中です。</h2><p>テンプレートをコピーすると、新しい記事を追加できます。</p></div>}
+  </section>
+</BaseLayout>

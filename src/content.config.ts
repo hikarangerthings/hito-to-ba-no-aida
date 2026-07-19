@@ -64,4 +64,35 @@ const business = defineCollection({
   }),
 });
 
-export const collections = { interviews, reviews, business };
+const playlists = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/playlists' }),
+  schema: z.object({
+    title: z.string(),
+    slug: z.string(),
+    description: z.string(),
+    publishedAt: z.coerce.date(),
+    author: z.string(),
+    theme: z.string().optional(),
+    serviceUrl: z.string().url().optional(),
+    draft: z.boolean().default(false),
+    tags: z.array(z.string()).default([]),
+  }),
+});
+
+const movies = defineCollection({
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/movies' }),
+  schema: z.object({
+    title: z.string(),
+    slug: z.string(),
+    description: z.string(),
+    publishedAt: z.coerce.date(),
+    author: z.string(),
+    movieTitle: z.string(),
+    director: z.string().optional(),
+    releaseYear: z.number().int().optional(),
+    draft: z.boolean().default(false),
+    tags: z.array(z.string()).default([]),
+  }),
+});
+
+export const collections = { interviews, reviews, business, playlists, movies };
