@@ -1,0 +1,465 @@
+media:
+  - name: article_images
+    label: 記事画像
+    input: public/images/articles
+    output: /images/articles
+    categories: [image]
+    extensions: [jpg, jpeg, png, webp, gif, svg]
+    rename: safe
+
+settings:
+  content:
+    merge: true
+  commit:
+    identity: user
+    templates:
+      create: "記事を追加: {path}"
+      update: "記事を更新: {path}"
+      delete: "記事を削除: {path}"
+      rename: "記事名を変更: {oldPath} -> {newPath}"
+
+content:
+  - name: interviews
+    label: Interview
+    type: collection
+    path: src/content/interviews
+    format: yaml-frontmatter
+    filename:
+      template: "{year}-{month}-{day}-{slug}.md"
+      field: create
+    exclude: ["_template.md"]
+    subfolders: false
+    view:
+      fields: [title, guestName, publishedAt, draft]
+      primary: title
+      sort: [publishedAt, title]
+      search: [title, description, guestName, category, tags]
+      default:
+        sort: publishedAt
+        order: desc
+    fields:
+      - name: title
+        label: 記事タイトル
+        type: string
+        required: true
+      - name: slug
+        label: URL用の名前
+        type: string
+        required: true
+        description: 半角英小文字・数字・ハイフンを使い、他の記事と重複しない名前にします。
+      - name: number
+        label: 記事番号
+        type: string
+        description: 例：05
+      - name: description
+        label: 記事の紹介文
+        type: text
+        required: true
+        options:
+          maxlength: 240
+      - name: publishedAt
+        label: 公開日
+        type: date
+        required: true
+        options:
+          format: yyyy-MM-dd
+      - name: updatedAt
+        label: 更新日
+        type: date
+        options:
+          format: yyyy-MM-dd
+      - name: category
+        label: カテゴリ名
+        type: string
+        required: true
+      - name: categorySlug
+        label: カテゴリURL名
+        type: string
+        required: true
+        description: 半角英小文字・数字・ハイフンで入力します。
+      - name: guestName
+        label: ゲスト名
+        type: string
+        required: true
+      - name: guestRole
+        label: ゲストの肩書き
+        type: string
+        required: true
+      - name: guestProfile
+        label: ゲストプロフィール
+        type: text
+        required: true
+      - name: author
+        label: 執筆者
+        type: string
+        required: true
+        default: Hikaru Taniguchi
+      - name: thumbnail
+        label: 一覧用画像
+        type: image
+        options:
+          media: article_images
+          path: interviews
+      - name: mainImage
+        label: メイン画像
+        type: image
+        options:
+          media: article_images
+          path: interviews
+      - name: mainImageAlt
+        label: 画像の説明
+        type: string
+        description: 画像を使用する場合は、その内容が伝わる短い説明を入力します。
+      - name: featured
+        label: 新着記事として大きく表示
+        type: boolean
+        default: false
+      - name: draft
+        label: 下書き
+        type: boolean
+        default: true
+        description: オンの間は公開サイトに表示されません。
+      - name: tags
+        label: タグ
+        type: string
+        list: true
+      - name: afterword
+        label: 編集後記
+        type: text
+      - name: body
+        label: 本文
+        type: rich-text
+        required: true
+        options:
+          format: markdown
+          media: article_images
+          path: interviews
+          switcher: true
+
+  - name: reviews
+    label: Book Review
+    type: collection
+    path: src/content/reviews
+    format: yaml-frontmatter
+    filename:
+      template: "{year}-{month}-{day}-{slug}.md"
+      field: create
+    exclude: ["_template.md"]
+    subfolders: false
+    view:
+      fields: [title, bookTitle, publishedAt, draft]
+      primary: title
+      sort: [publishedAt, title]
+      search: [title, description, bookTitle, bookAuthor, tags]
+      default:
+        sort: publishedAt
+        order: desc
+    fields:
+      - name: title
+        label: 書評タイトル
+        type: string
+        required: true
+      - name: slug
+        label: URL用の名前
+        type: string
+        required: true
+        description: 半角英小文字・数字・ハイフンを使い、他の記事と重複しない名前にします。
+      - name: description
+        label: 記事の紹介文
+        type: text
+        required: true
+        options:
+          maxlength: 240
+      - name: publishedAt
+        label: 公開日
+        type: date
+        required: true
+        options:
+          format: yyyy-MM-dd
+      - name: updatedAt
+        label: 更新日
+        type: date
+        options:
+          format: yyyy-MM-dd
+      - name: author
+        label: 執筆者
+        type: string
+        required: true
+        default: Hikaru Taniguchi
+      - name: bookTitle
+        label: 本のタイトル
+        type: string
+        required: true
+      - name: bookAuthor
+        label: 本の著者
+        type: string
+        required: true
+      - name: publisher
+        label: 出版社
+        type: string
+      - name: cover
+        label: 書影
+        type: image
+        options:
+          media: article_images
+          path: reviews
+      - name: coverAlt
+        label: 書影の説明
+        type: string
+      - name: rating
+        label: 評価（0〜5）
+        type: number
+        options:
+          min: 0
+          max: 5
+          step: 0.5
+      - name: draft
+        label: 下書き
+        type: boolean
+        default: true
+        description: オンの間は公開サイトに表示されません。
+      - name: tags
+        label: タグ
+        type: string
+        list: true
+      - name: body
+        label: 本文
+        type: rich-text
+        required: true
+        options:
+          format: markdown
+          media: article_images
+          path: reviews
+          switcher: true
+
+  - name: business
+    label: Business
+    type: collection
+    path: src/content/business
+    format: yaml-frontmatter
+    filename:
+      template: "{year}-{month}-{day}-{slug}.md"
+      field: create
+    exclude: ["_template.md"]
+    subfolders: false
+    view:
+      fields: [title, businessName, publishedAt, draft]
+      primary: title
+      sort: [publishedAt, title]
+      search: [title, description, businessName, businessType, tags]
+      default:
+        sort: publishedAt
+        order: desc
+    fields:
+      - name: title
+        label: 記事タイトル
+        type: string
+        required: true
+      - name: slug
+        label: URL用の名前
+        type: string
+        required: true
+        description: 半角英小文字・数字・ハイフンを使い、他の記事と重複しない名前にします。
+      - name: description
+        label: 記事の紹介文
+        type: text
+        required: true
+        options:
+          maxlength: 240
+      - name: publishedAt
+        label: 公開日
+        type: date
+        required: true
+        options:
+          format: yyyy-MM-dd
+      - name: updatedAt
+        label: 更新日
+        type: date
+        options:
+          format: yyyy-MM-dd
+      - name: author
+        label: 執筆者
+        type: string
+        required: true
+        default: Hikaru Taniguchi
+      - name: businessName
+        label: 会社名・サービス名
+        type: string
+      - name: businessType
+        label: 事業分野
+        type: string
+      - name: mainImage
+        label: メイン画像
+        type: image
+        options:
+          media: article_images
+          path: business
+      - name: mainImageAlt
+        label: 画像の説明
+        type: string
+      - name: draft
+        label: 下書き
+        type: boolean
+        default: true
+        description: オンの間は公開サイトに表示されません。
+      - name: tags
+        label: タグ
+        type: string
+        list: true
+      - name: body
+        label: 本文
+        type: rich-text
+        required: true
+        options:
+          format: markdown
+          media: article_images
+          path: business
+          switcher: true
+
+  - name: playlists
+    label: Playlist
+    type: collection
+    path: src/content/playlists
+    format: yaml-frontmatter
+    filename:
+      template: "{year}-{month}-{day}-{slug}.md"
+      field: create
+    exclude: ["_template.md"]
+    subfolders: false
+    view:
+      fields: [title, theme, publishedAt, draft]
+      primary: title
+      sort: [publishedAt, title]
+      search: [title, description, theme, tags]
+      default:
+        sort: publishedAt
+        order: desc
+    fields:
+      - name: title
+        label: 記事タイトル
+        type: string
+        required: true
+      - name: slug
+        label: URL用の名前
+        type: string
+        required: true
+        description: 半角英小文字・数字・ハイフンを使い、他の記事と重複しない名前にします。
+      - name: description
+        label: 記事の紹介文
+        type: text
+        required: true
+        options:
+          maxlength: 240
+      - name: publishedAt
+        label: 公開日
+        type: date
+        required: true
+        options:
+          format: yyyy-MM-dd
+      - name: author
+        label: 執筆者
+        type: string
+        required: true
+        default: Hikaru Taniguchi
+      - name: theme
+        label: テーマ
+        type: string
+      - name: serviceUrl
+        label: SpotifyなどのURL
+        type: string
+      - name: draft
+        label: 下書き
+        type: boolean
+        default: true
+        description: オンの間は公開サイトに表示されません。
+      - name: tags
+        label: タグ
+        type: string
+        list: true
+      - name: body
+        label: 本文・曲目
+        type: rich-text
+        required: true
+        options:
+          format: markdown
+          media: article_images
+          path: playlists
+          switcher: true
+
+  - name: movies
+    label: Movie
+    type: collection
+    path: src/content/movies
+    format: yaml-frontmatter
+    filename:
+      template: "{year}-{month}-{day}-{slug}.md"
+      field: create
+    exclude: ["_template.md"]
+    subfolders: false
+    view:
+      fields: [title, movieTitle, publishedAt, draft]
+      primary: title
+      sort: [publishedAt, title]
+      search: [title, description, movieTitle, director, tags]
+      default:
+        sort: publishedAt
+        order: desc
+    fields:
+      - name: title
+        label: 記事タイトル
+        type: string
+        required: true
+      - name: slug
+        label: URL用の名前
+        type: string
+        required: true
+        description: 半角英小文字・数字・ハイフンを使い、他の記事と重複しない名前にします。
+      - name: description
+        label: 記事の紹介文
+        type: text
+        required: true
+        options:
+          maxlength: 240
+      - name: publishedAt
+        label: 公開日
+        type: date
+        required: true
+        options:
+          format: yyyy-MM-dd
+      - name: author
+        label: 執筆者
+        type: string
+        required: true
+        default: Hikaru Taniguchi
+      - name: movieTitle
+        label: 映画タイトル
+        type: string
+        required: true
+      - name: director
+        label: 監督
+        type: string
+      - name: releaseYear
+        label: 公開年
+        type: number
+        options:
+          min: 1888
+          max: 2100
+          step: 1
+      - name: draft
+        label: 下書き
+        type: boolean
+        default: true
+        description: オンの間は公開サイトに表示されません。
+      - name: tags
+        label: タグ
+        type: string
+        list: true
+      - name: body
+        label: 本文
+        type: rich-text
+        required: true
+        options:
+          format: markdown
+          media: article_images
+          path: movies
+          switcher: true
